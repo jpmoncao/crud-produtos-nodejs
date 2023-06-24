@@ -1,5 +1,4 @@
 // Instale a extensão REST Client e substitua as chaves por valores respectivos
-// ***OBS: Está tudo em memória, então quando você dar um reload, tudo será resetado ^^
 
 ### CADASTRAR
 POST http://localhost:3001/products 
