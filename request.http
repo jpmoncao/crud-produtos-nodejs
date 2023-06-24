@@ -1,0 +1,36 @@
+// Instale a extensão REST Client e substitua as chaves por valores respectivos
+// ***OBS: Está tudo em memória, então quando você dar um reload, tudo será resetado ^^
+
+### CADASTRAR
+POST http://localhost:3001/products 
+content-type: application/json
+
+{
+    "name": "{nome do produto}",
+    "price": 00.00
+}
+
+
+
+### LISTAR TODOS
+GET http://localhost:3001/products
+
+### LISTAR PELO ID
+GET http://localhost:3001/products/{id}
+
+### LISTAR COM FILTRO
+GET http://localhost:3001/products/?max-price={filter}
+
+
+
+### ALTERAR
+PUT http://localhost:3001/products/{id}
+content-type: application/json
+
+{
+    "name": "{nome do produto}",
+    "price": 00.00
+}
+
+### DELETAR
+DELETE http://localhost:3001/products/{id}
