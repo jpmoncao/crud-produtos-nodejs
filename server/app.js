@@ -1,8 +1,12 @@
 const express = require('express');
+const cors = require('cors');
 const { randomUUID } = require('crypto');
 const fs = require('fs');
 
-const app = express().use(express.json());
+
+const app = express();
+app.use(express.json());
+app.use(cors());
 
 let products = [];
 

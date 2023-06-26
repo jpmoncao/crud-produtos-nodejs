@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro</title>
+</head>
+
+<body>
+    <form method="post">
+        <h1>Cadastrar Produto</h1>
+        <div>
+            <label for="nome-produto">Nome:</label>
+            <input type="text" name="nome-produto" id="nome-produto">
+        </div>
+        <div>
+            <label for="preco-produto">Preço:</label>
+            <input type="number" name="preco-produto" id="preco-produto">
+        </div>
+        <input type="submit" value="Cadastrar" />
+    </form>
+
+    <hr />
+
+    <input type="button" value="Listar produtos" class="listar-produtos">
+    <section class="lista-produtos">
+    </section>
+
+    <script src="action.js"></script>
+</body>
+
+</html>
