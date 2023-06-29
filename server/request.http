@@ -1,35 +1,31 @@
 // Instale a extensão REST Client e substitua as chaves por valores respectivos
 
 ### CADASTRAR
-POST http://localhost:3001/products 
+POST http://localhost:5050/products 
 content-type: application/json
 
 {
-    "name": "{nome do produto}",
-    "price": 00.00
+    "name": "Nome produto",
+    "price": 10.00
 }
 
-
-
 ### LISTAR TODOS
-GET http://localhost:3001/products
+GET http://localhost:5050/products
 
 ### LISTAR PELO ID
-GET http://localhost:3001/products/{id}
+GET http://localhost:5050/products/{id}
 
 ### LISTAR COM FILTRO
-GET http://localhost:3001/products/?max-price={filter}
-
-
+GET http://localhost:5050/products/?max-price={filter}
 
 ### ALTERAR
-PUT http://localhost:3001/products/{id}
+PUT http://localhost:5050/products/{id}
 content-type: application/json
 
 {
-    "name": "{nome do produto}",
-    "price": 00.00
+    "name": "Teste alterar",
+    "price": 17.5
 }
 
 ### DELETAR
-DELETE http://localhost:3001/products/{id}
+DELETE http://localhost:5050/products/{id}
