@@ -1,90 +1,85 @@
+const runQuery = require('./db/query');
 const express = require('express');
 const cors = require('cors');
 const { randomUUID } = require('crypto');
 const fs = require('fs');
 
-
 const app = express();
 app.use(express.json());
 app.use(cors());
 
-let products = [];
-
-fs.readFile('products.json', 'utf-8', (err, data) => {
-    if (err)
-        console.log(err);
-    else
-        products = JSON.parse(data);
-})
-
-app.post('/products', (req, res) => {
+app.post('/products', async (req, res) => {
     const { name, price } = req.body;
+    console.log(name, price)
 
     const product = {
         id: randomUUID(),
         name,
         price
-    }
+    };
 
-    products.push(product);
-    createProductFile(product);
-})
+    let sql = `INSERT INTO produtos (id_produto, nome_produto, preco_produto) VALUES ('${product.id}', '${product.name}', '${product.price}')`;
 
-app.get('/products', (req, res) => {
-    const { 'max-price': maxPrice } = req.query;
+    await runQuery(sql);
 
-    if (maxPrice) {
-        const filteredProducts = products.filter(product => product.price <= parseFloat(maxPrice));
-        return res.json(filteredProducts);
-    }
+    sql = `SELECT * FROM produtos WHERE produtos.id_produto = '${product.id}'`;
+    const result = await runQuery(sql);
 
-    return res.json(products);
+    res.status(201).json(result);
 });
 
-app.get('/products/:id', (req, res) => {
+
+app.get('/products', async (req, res) => {
+    const { 'max-price': maxPrice } = req.query;
+
+    let sql = 'SELECT * FROM produtos';
+
+    if (maxPrice) {
+        sql += ' WHERE produtos.preco_produto <= ' + maxPrice;
+    }
+
+    try {
+        const products = await runQuery(sql);
+        res.json(products);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'An error occurred' });
+    }
+});
+
+
+app.get('/products/:id', async (req, res) => {
     const { id } = req.params;
 
-    return res.json(products.find(product => product.id === id));
+    sql = `SELECT * FROM produtos WHERE produtos.id_produto = '${id}'`;
+    const product = await runQuery(sql);
+
+    return res.json(product);
 })
 
-app.put('/products/:id', (req, res) => {
+app.put('/products/:id', async (req, res) => {
     const { id } = req.params;
     const { name, price } = req.body;
 
-    const productIndex = products.findIndex(product => product.id === id);
+    sql = `UPDATE produtos SET produtos.nome_produto = '${name}', produtos.preco_produto = '${price}' WHERE produtos.id_produto = '${id}'`;
+    await runQuery(sql);
 
-    if (productIndex === -1) {
-        return res.status(404).json({ error: 'Product not found' });
-    }
+    sql = `SELECT * FROM produtos WHERE produtos.id_produto = '${id}'`;
+    const product = await runQuery(sql);
 
-    products[productIndex].name = name;
-    products[productIndex].price = price;
-
-
-    createProductFile(products[productIndex]);
-
-    return res.json(products[productIndex]);
+    return res.json(product);
 });
 
-app.delete('/products/:id', (req, res) => {
+app.delete('/products/:id', async (req, res) => {
     const { id } = req.params;
 
-    const productIndex = products.findIndex(product => product.id === id);
+    sql = `DELETE FROM produtos WHERE produtos.id_produto = '${id}'`;
+    await runQuery(sql);
 
-    if (productIndex === -1) {
-        return res.status(404).json({ error: 'Product not found' });
-    }
+    sql = `SELECT * FROM produtos`;
+    const products = await runQuery(sql);
 
-    products.splice(productIndex, 1);
-
-    createProductFile(products);
     return res.json(products);
 })
 
-function createProductFile(product) {
-    fs.writeFile('products.json', JSON.stringify(products), (err) => {
-        return res.json(err ? err : product)
-    })
-}
-
-app.listen(3001, () => console.log('Server is running in port 3001!'));
+app.listen(5050, () => console.log('Server is running in port 5050!'));
